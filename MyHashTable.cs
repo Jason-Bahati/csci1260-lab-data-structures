@@ -4,7 +4,8 @@
 //
 // Part F. Build BucketFor and Add along with the Class 3 demo.
 // TryGetValue is Exercise 6. Do not use Dictionary anywhere in this class.
-public class MyHashTable<TKey, TValue> where TKey : notnull
+public class MyHashTable<TKey, TValue>
+    where TKey : notnull
 {
     private List<KeyValuePair<TKey, TValue>>[] buckets;
     private int count;
@@ -33,7 +34,16 @@ public class MyHashTable<TKey, TValue> where TKey : notnull
     public void Add(TKey key, TValue value)
     {
         // TODO: Part F, demo
-        throw new NotImplementedException();
+        List<KeyValuePair<TKey, TValue>> bucket = buckets[BucketFor(key)];
+        foreach (KeyValuePair<TKey, TValue> pair in bucket)
+        {
+            if (Equals(pair.Key, key))
+            {
+                throw new ArgumentException("Key already exists.");
+            }
+        }
+        bucket.Add(new KeyValuePair<TKey, TValue>(key, value));
+        count++;
     }
 
     // Step 3: search only the key's own bucket. When the key is there, set
@@ -42,7 +52,16 @@ public class MyHashTable<TKey, TValue> where TKey : notnull
     public bool TryGetValue(TKey key, out TValue? value)
     {
         // TODO: Part F, Exercise 6
-        throw new NotImplementedException();
+        foreach (KeyValuePair<TKey, TValue> pair in buckets[BucketFor(key)])
+        {
+            if (Equals(pair.Key, key))
+            {
+                value = pair.Value;
+                return true;
+            }
+        }
+        value = default;
+        return false;
     }
 
     // Given. A line like "1 2 1 0 1 0 0": how many pairs sit in each bucket.
@@ -58,5 +77,10 @@ public class MyHashTable<TKey, TValue> where TKey : notnull
             result += buckets[i].Count;
         }
         return result;
+    }
+
+    private int BucketFor(TKey key)
+    {
+        return Math.Abs(key.GetHashCode() % buckets.Length);
     }
 }
