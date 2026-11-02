@@ -8,23 +8,25 @@ public class MyStack<T>
     // the items. The top of the stack is the END of the list.
 
     // TODO: Part C. How many items are on the stack.
-    public int Count => throw new NotImplementedException();
+    public int Count => items.Count;
 
     // TODO: Part C. True when the stack holds nothing.
-    public bool IsEmpty => throw new NotImplementedException();
+    public bool IsEmpty => items.Count == 0;
 
     // Put an item on top.
     public void Push(T item)
     {
         // TODO: Part C, demo
-        throw new NotImplementedException();
+        items.Add(item);
     }
 
     // Take the top item off and hand it back.
     public T Pop()
     {
         // TODO: Part C, demo
-        throw new NotImplementedException();
+        T top = Peek();
+        items.RemoveAt(items.Count - 1);
+        return top;
     }
 
     // Look at the top item without removing it. On an empty stack, throw
@@ -32,6 +34,12 @@ public class MyStack<T>
     public T Peek()
     {
         // TODO: Part C, demo
-        throw new NotImplementedException();
+        if (IsEmpty)
+        {
+            throw new InvalidOperationException("Stack is empty.");
+        }
+        return items[items.Count - 1];
     }
+
+    private MyList<T> items = new MyList<T>();
 }
