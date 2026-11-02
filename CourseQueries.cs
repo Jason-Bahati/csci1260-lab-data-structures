@@ -8,14 +8,14 @@ public static class CourseQueries
     public static List<string> OpenCourseCodes(List<Course> courses)
     {
         // TODO: Part G, demo. Where, then Select, then ToList.
-        throw new NotImplementedException();
+        return courses.Where(c => c.SeatsLeft > 0).Select(c => c.Code).ToList();
     }
 
     // Part G, demo: the titles of the four credit courses.
     public static List<string> FourCreditTitles(List<Course> courses)
     {
         // TODO: Part G, demo
-        throw new NotImplementedException();
+        return courses.Where(c => c.Credits == 4).Select(c => c.Title).ToList();
     }
 
     // Exercise 7: one line per open course, in list order,
@@ -23,7 +23,10 @@ public static class CourseQueries
     public static List<string> SeatsLeftReport(List<Course> courses)
     {
         // TODO: Part G, Exercise 7
-        throw new NotImplementedException();
+        return courses
+            .Where(c => c.SeatsLeft > 0)
+            .Select(c => c.Code + ": " + c.SeatsLeft + " seats left")
+            .ToList();
     }
 
     // Part H, demo: the three biggest courses, largest first,
@@ -31,28 +34,32 @@ public static class CourseQueries
     public static List<string> TopThreeByEnrollment(List<Course> courses)
     {
         // TODO: Part H, demo
-        throw new NotImplementedException();
+        return courses
+            .OrderByDescending(c => c.Enrolled)
+            .Take(3)
+            .Select(c => c.Code + " (" + c.Enrolled + ")")
+            .ToList();
     }
 
     // Part H, demo: every student in every course, added up.
     public static int TotalEnrolled(List<Course> courses)
     {
         // TODO: Part H, demo
-        throw new NotImplementedException();
+        return courses.Sum(c => c.Enrolled);
     }
 
     // Part H, demo: how many courses have no seats left.
     public static int FullCourseCount(List<Course> courses)
     {
         // TODO: Part H, demo
-        throw new NotImplementedException();
+        return courses.Count(c => c.SeatsLeft == 0);
     }
 
     // Part H, demo: a dictionary from course code to course, in one line.
     public static Dictionary<string, Course> ByCode(List<Course> courses)
     {
         // TODO: Part H, demo
-        throw new NotImplementedException();
+        return courses.ToDictionary(c => c.Code);
     }
 
     // Exercise 8: one line per department, most students first,
@@ -60,6 +67,12 @@ public static class CourseQueries
     public static List<string> DepartmentReport(List<Course> courses)
     {
         // TODO: Part H, Exercise 8
-        throw new NotImplementedException();
+        return courses
+            .GroupBy(c => c.Dept)
+            .OrderByDescending(g => g.Sum(c => c.Enrolled))
+            .Select(g =>
+                g.Key + " | courses: " + g.Count() + " | students: " + g.Sum(c => c.Enrolled)
+            )
+            .ToList();
     }
 }
